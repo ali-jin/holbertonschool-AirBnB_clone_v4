@@ -20,7 +20,7 @@ header .logo {
   align-self: center;
 }
 
-
-.availabl {
-    background-color: #ff545f;
-  }
+.available {
+  background-color: #ff545f;
+  background-color: #ff545f!important;
+}
