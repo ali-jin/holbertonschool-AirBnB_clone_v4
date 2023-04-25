@@ -12,16 +12,15 @@ header .logo {
 
 #api_status {
   float: right;
+  margin-right: 30px;
+  border-radius: 50%;
+  background-color: #CCCCCC;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 30px;
-  background-color: #cccccc;
+  align-self: center;
 }
 
-.available {
+
+.availabl {
     background-color: #ff545f;
   }
