@@ -9,6 +9,17 @@ $('document').ready(function () {
     }
   });
 
+  const listAmenities = {};
+
+  $('input[type="checkbox"]').change(function () {
+    if ($(this).is(':checked')) {
+      listAmenities[$(this).attr('data-id')] = $(this).attr('data-name');
+    } else {
+      delete listAmenities[$(this).attr('data-id')];
+    }
+    $('.amenities H4').text(Object.values(listAmenities).join(', '));
+  });
+
   const urlPlaces = 'http://' + window.location.hostname + ':5001/api/v1/places_search/';
   $.ajax({
     url: urlPlaces,
@@ -52,15 +63,16 @@ $('document').ready(function () {
               </ARTICLE>`;
     }));
 
-    const listAmenities = {};
-    const amenities_names = [];
-    $('input[type="checkbox"]').change(function () {
-      if ($(this).is(':checked')) {
-        listAmenities[$(this).attr('data-id')] = $(this).attr('data-name');
-      } else {
-        delete listAmenities[$(this).attr('data-id')];
-      }
-      $('.amenities H4').text(Object.values(listAmenities).join(', '));
+    $('button').click(function () {
+      $.ajax({
+        url: urlPlaces,
+        type: 'POST',
+        data: JSON.stringify({ 'amenities': Object.keys(listAmenities) }),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: newPlaces
+      },
+      )
     });
 
   }
