@@ -9,7 +9,6 @@ $('document').ready(function () {
     }
   });
 
-  const urlPlaces = 'http://' + window.location.hostname + ':5001/api/v1/places_search/';
   const listAmenities = {};
 
   $('input[type="checkbox"]').change(function () {
@@ -21,38 +20,60 @@ $('document').ready(function () {
     $('.amenities H4').text(Object.values(listAmenities).join(', '));
   });
 
-  $('button').click(function () {
-    $.ajax({
-      url: urlPlaces,
-      method: 'POST',
-      ContentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({ amenities: Object.keys(listAmenities) }),
-      success: function (dictData) {
-        $('.places').empty();
-        dictData.forEach(data => $('.places').append(newPlaces(data)));
-      },
-    });
+  const urlPlaces = 'http://' + window.location.hostname + ':5001/api/v1/places_search/';
+  $.ajax({
+    url: urlPlaces,
+    type: 'POST',
+    data: '{}',
+    contentType: 'application/json',
+    dataType: 'json',
+    success: newPlaces
   });
 
-  function newPlaces(place) {
-    return `
-    <article>
-      <div class="title_box">
-        <h2>${place.name}</h2>
-        <div class="price_by_night">${place.price_by_night}</div>
-      </div>
-      <div class="information">
-        <div class="max_guest">${place.max_guest} Guest</div>
-        <div class="number_rooms">${place.number_rooms} Bedroom</div>
-        <div class="number_bathrooms">${place.number_bathrooms} Bathroom</div>
-      </div>
-      <div class="user">
-        <b>Owner:</b> ${place.user.first_name} ${place.user.last_name}
-      </div>
-      <div class="description">
-        ${place.description}
-      </div>
-    </article>`;
-  };
+  function newPlaces(data) {
+    $('SECTION.places').empty();
+    $('SECTION.places').append(data.map(place => {
+      return `<ARTICLE>
+              <DIV class="title">
+                <H2>${place.name}</H2>
+                  <DIV class="price_by_night">
+                    $${place.price_by_night}
+                  </DIV>
+                </DIV>
+                <DIV class="information">
+                  <DIV class="max_guest">
+                    <I class="fa fa-users fa-3x" aria-hidden="true"></I>
+                    </BR>
+                    ${place.max_guest} Guests
+                  </DIV>
+                  <DIV class="number_rooms">
+                    <I class="fa fa-bed fa-3x" aria-hidden="true"></I>
+                    </BR>
+                    ${place.number_rooms} Bedrooms
+                  </DIV>
+                  <DIV class="number_bathrooms">
+                    <I class="fa fa-bath fa-3x" aria-hidden="true"></I>
+                    </BR>
+                    ${place.number_bathrooms} Bathrooms
+                  </DIV>
+                </DIV>
+                <DIV class="description">
+                  ${place.description}
+                </DIV>
+              </ARTICLE>`;
+    }));
+
+    $('button').click(function () {
+      $.ajax({
+        url: urlPlaces,
+        type: 'POST',
+        data: JSON.stringify({ 'amenities': Object.keys(listAmenities) }),
+        contentType: 'application/json',
+        dataType: 'json',
+        success: newPlaces
+      },
+      )
+    });
+
+  }
 });
